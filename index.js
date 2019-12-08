@@ -25,7 +25,6 @@ app.get('/support', function(req, res) {
     res.sendFile(path.join(__dirname+'/html/support.html'));
 });
 app.post('/handlecontact', function(req, res){
-    //console.log(req.body);
     res.status = 201;
     res.send({message: "we recieved your message"});
 })
