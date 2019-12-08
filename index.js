@@ -12,10 +12,10 @@ app.use(parser.json());
 app.use(express.static('html'));
 
 const databaseData = {
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"razorlight",
+    host:"remotemysql.com",
+    user:"k3tAfeaBBv",
+    password:"oL6ETptkAG",
+    database:"k3tAfeaBBv",
     port:3306
 }
 
