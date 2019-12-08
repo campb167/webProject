@@ -41,10 +41,10 @@ app.get('/store', function(req, res) {
 app.get('/support', function(req, res) {   
     res.sendFile(path.join(__dirname+'/html/support.html'));
 });
-app.get('/support', function(req, res) {   
+app.get('/login', function(req, res) {   
     res.sendFile(path.join(__dirname+'/html/login.html'));
 });
-app.get('/support', function(req, res) {   
+app.get('/dashboard', function(req, res) {   
     res.sendFile(path.join(__dirname+'/html/dashboard.html'));
 });
 
@@ -64,7 +64,7 @@ app.get('/createDB', function(req, res) {
 });
 
 app.get('/dashboard', function (req, res){
-    
+
     if(req.session.user){
         res.sendFile(path.join(__dirname+'/html/dashboard.html'))
     }
