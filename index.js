@@ -113,7 +113,7 @@ app.get('/logout', function (req,res){
 
     req.session.user = undefined;
 
-    res.send("you logged out successfully");
+    res.sendFile(path.join(__dirname+'/html/home.html'))
 
 })
 
