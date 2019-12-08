@@ -1,20 +1,27 @@
 var koa = require('koa');
 var app = new koa();
-
-var express = require('express');
 var db = require('./database');
-var app = express();
 var parser = require('body-parser');
+var express = require('express');
+var session =require('express-session');
+var ejs = require('ejs');
+var path = require('path');
+var cookieParser = require('cookie-parser');
 
+var app = express();
 
-const path = require('path');
+app.use(cookieParser());
+app.use(session({secret: "egpei8uh4g987he4gu3238372hb"}));
+
 app.use(parser.json());
+app.use(parser.urlencoded());
+
 app.use(express.static('html'));
 
 const databaseData = {
     host:"remotemysql.com",
     user:"k3tAfeaBBv",
-    password:"oL6ETptkAG",
+    password:"6YqxPcIMrB",
     database:"k3tAfeaBBv",
     port:3306
 }
@@ -34,6 +41,12 @@ app.get('/store', function(req, res) {
 app.get('/support', function(req, res) {   
     res.sendFile(path.join(__dirname+'/html/support.html'));
 });
+app.get('/support', function(req, res) {   
+    res.sendFile(path.join(__dirname+'/html/login.html'));
+});
+app.get('/support', function(req, res) {   
+    res.sendFile(path.join(__dirname+'/html/dashboard.html'));
+});
 
 app.get('/createDB', function(req, res) {  
     //run the create table function
@@ -49,6 +62,62 @@ app.get('/createDB', function(req, res) {
         res.end("tables were created successfully");
     });
 });
+
+app.get('/dashboard', function (req, res){
+    
+    if(req.session.user){
+        res.sendFile(path.join(__dirname+'/html/dashboard.html'))
+    }
+    else{
+        res.redirect('/login')
+    }
+});
+
+app.get('/login', function (req,res){
+
+    res.sendFile(path.join(__dirname+'/html/login.html'))
+});
+
+app.post('/authenticate', function(req, res){
+
+    console.log(req.body)
+
+    let loginData = {
+        username : req.body.username,
+        password : req.body.password
+    }
+
+    db.login(databaseData, loginData, function(err, data){
+
+        if(err){
+
+        }
+        else{
+            if(data && data.length > 0){
+
+                req.session.user = data[0];
+                //you loged in 
+                //you can go to home page
+                res.redirect('/dashboard');
+            }
+            else
+            {
+                res.redirect('/login')
+            }
+        }
+    })
+
+});
+
+app.get('/logout', function (req,res){
+
+    req.session.user = undefined;
+
+    res.send("you logged out successfully");
+
+})
+
+//Support tickets
 
 app.post('/handlecontact', function(req, res){
 
